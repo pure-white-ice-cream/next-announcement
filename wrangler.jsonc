@@ -35,7 +35,7 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -54,4 +54,11 @@
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
 	// "vars": {  "MY_VARIABLE": "production_value" }
+	"d1_databases": [
+		{
+			"binding": "next_announcement", // available in your Worker on env.DB
+			"database_name": "next-announcement",
+			"database_id": "c5942ac5-1aaa-4f61-aa99-1ea44efe9534"
+		}
+	]
 }
