@@ -1,9 +1,9 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-type TestRecord = {
-	id: number;
+export type McServerRow = {
 	name: string;
-	updated_at: string;
+	address: string;
+	port: string | null;
 };
 
 type D1Env = CloudflareEnv & {
@@ -29,14 +29,13 @@ export async function GET() {
 	try {
 		const db = getDatabase();
 
-		const record = await db
-			.prepare("SELECT id, name, updated_at FROM test_records WHERE name = ?")
-			.bind("test")
-			.first<TestRecord>();
+		const { results } = await db
+			.prepare("SELECT name, address, port FROM mc ORDER BY rowid ASC")
+			.all<McServerRow>();
 
 		return Response.json({
 			ok: true,
-			record,
+			rows: results ?? [],
 		});
 	} catch (error) {
 		const message = error instanceof Error ? error.message : "Unknown D1 error";
@@ -45,7 +44,7 @@ export async function GET() {
 		if (message.toLowerCase().includes("no such table")) {
 			return Response.json({
 				ok: true,
-				record: null,
+				rows: [],
 			});
 		}
 
